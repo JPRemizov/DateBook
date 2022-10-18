@@ -246,6 +246,17 @@ namespace DateBook
                     userInput();
                     goto link2;
                 }
+                else if (userKey.Key == ConsoleKey.F6)
+                {
+                    Console.WriteLine("Сохранения дешифрованы!");
+                    File.Decrypt("saveNote.xml");
+                    File.Decrypt("saveDate.xml");
+                    colorYellow();
+                    Console.WriteLine("Нажмите любую клавишу для продолжения");
+                    Console.ResetColor();
+                    userInput();
+                    goto link2;
+                }
                 else if (userKey.Key == ConsoleKey.F10)
                 {
                     Console.ForegroundColor = ConsoleColor.Magenta;
