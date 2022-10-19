@@ -19,7 +19,7 @@ namespace DateBook
         #region GlobalVar
         private static DateTime date = DateTime.Now;
         private static Note note = new Note();
-        private static int position = 0;
+        private static int arrowPosition = 0;
         private static int size = 0;
         private static int Pos = 1;
         #endregion
@@ -47,45 +47,42 @@ namespace DateBook
         private static void leftArrow()
         {
             date = date.AddDays(-1);
-            Numbers.Clear();
-            position = 0;
+            arrowPosition = 0;
             size = 0;
             noteOut();
         }
         private static void rightArrow()
         {
             date = date.AddDays(1);
-            Numbers.Clear();
-            position = 0;
+            arrowPosition = 0;
             size = 0;
             noteOut();
         }
         private static void upArrow()
         {
-            if (size >= 1 && position > 1)
+            if (size >= 1 && arrowPosition > 1)
             {
 
-                position--;
+                arrowPosition--;
                 Console.Clear();
                 noteOut();
-                Console.SetCursorPosition(0, position);
+                Console.SetCursorPosition(0, arrowPosition);
                 Console.WriteLine("->");
             }
         }
         private static void downArrow()
         {
-            if (size >= 1 && position < size)
+            if (size >= 1 && arrowPosition < size)
             {
-                position++;
+                arrowPosition++;
                 noteOut();
-                Console.SetCursorPosition(0, position);
+                Console.SetCursorPosition(0, arrowPosition);
                 Console.WriteLine("->");
             }
         }
         private static void makeNote()
         {
             Console.Clear();
-            Numbers.Clear();
             Console.WriteLine($"Создание заметки на: {Date()}");
             Console.WriteLine("==================================");
             Dates.Add(Date());
@@ -203,21 +200,21 @@ namespace DateBook
                 else if (userKey.Key == ConsoleKey.Enter)
                 {
 
-                    if (position > 0)
+                    if (arrowPosition > 0)
                     {
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine($"Название: {Notes[Numbers[position - 1]].name}");
+                        Console.WriteLine($"Название: {Notes[Numbers[arrowPosition - 1]].name}");
                         Console.ResetColor();
                         Console.WriteLine("=======================================");
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine($"Описание: {Notes[Numbers[position - 1]].description}");
+                        Console.WriteLine($"Описание: {Notes[Numbers[arrowPosition - 1]].description}");
                         Console.ResetColor();
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Дата выполнения: {Notes[Numbers[position - 1]].dateComp}");
+                        Console.WriteLine($"Дата выполнения: {Notes[Numbers[arrowPosition - 1]].dateComp}");
                         Console.ResetColor();
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine($"Дата создания заметки: {Notes[Numbers[position - 1]].dateNow}");
+                        Console.WriteLine($"Дата создания заметки: {Notes[Numbers[arrowPosition - 1]].dateNow}");
                         Console.ResetColor();
 
                         while (true)
@@ -236,11 +233,11 @@ namespace DateBook
                 else if (userKey.Key == ConsoleKey.F1) { makeNote(); }
                 else if (userKey.Key == ConsoleKey.F2)
                 {
-                    if (position > 0)
+                    if (arrowPosition > 0)
                     {
-                        Notes.RemoveAt(Numbers[position - 1]);
-                        Dates.RemoveAt(Numbers[position - 1]);
-                        position = 0;
+                        Notes.RemoveAt(Numbers[arrowPosition - 1]);
+                        Dates.RemoveAt(Numbers[arrowPosition - 1]);
+                        arrowPosition = 0;
                         size = 0;
                         noteOut();
                     }
