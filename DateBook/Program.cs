@@ -38,7 +38,7 @@ namespace DateBook
         }
         private static string userInput()
         {
-            return Console.ReadLine();
+            return Console.ReadLine(); ;
         }
         private static ConsoleKeyInfo userInputKey()
         {
@@ -180,7 +180,6 @@ namespace DateBook
             noteOut();
             while (true)
             {
-
                 ConsoleKeyInfo userKey = userInputKey();
                 if (userKey.Key == ConsoleKey.RightArrow) { rightArrow(); }
                 else if (userKey.Key == ConsoleKey.LeftArrow) { leftArrow(); }
@@ -257,6 +256,22 @@ namespace DateBook
                     Console.ResetColor();
                     userInput();
                     noteOut();
+                }
+                else if (userKey.Key == ConsoleKey.F9)
+                {
+                    link1: Console.WriteLine("Вы действительно хотите удалить сохранения? (Да/Нет):");
+                    string validation = userInput();
+                    if(validation.ToLower() == "да")
+                    {
+                        File.Delete("saveDate.xml");
+                        File.Delete("saveNote.xml");
+                        Console.WriteLine("Сохранения удалены!\nНажмите любую клавишу для продолжения");
+                        userInput();
+                        noteOut();
+                        
+                    }
+                    else if (validation.ToLower() == "нет") { noteOut(); }
+                    else { Console.WriteLine("Введите либо \"Да\", либо \"Нет\""); goto link1; }
                 }
                 else if (userKey.Key == ConsoleKey.F10)
                 {
