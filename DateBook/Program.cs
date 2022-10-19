@@ -49,6 +49,7 @@ namespace DateBook
             date = date.AddDays(-1);
             Numbers.Clear();
             position = 0;
+            size = 0;
             noteOut();
         }
         private static void rightArrow()
@@ -56,6 +57,7 @@ namespace DateBook
             date = date.AddDays(1);
             Numbers.Clear();
             position = 0;
+            size = 0;
             noteOut();
         }
         private static void upArrow()
@@ -77,7 +79,6 @@ namespace DateBook
                 position++;
                 noteOut();
                 Console.SetCursorPosition(0, position);
-
                 Console.WriteLine("->");
             }
         }
@@ -142,7 +143,7 @@ namespace DateBook
                 xmlFormater2.Serialize(file, Dates);
             }
         }
-        private static void savesOut()
+        private static void savesLoad()
         {
             Console.Clear();
             var xmlFormater = new XmlSerializer(typeof(List<Note>));
@@ -176,9 +177,7 @@ namespace DateBook
         static void Main(string[] args)
 
         {
-        link2: noteOut();
-            Numbers.Clear();
-            position = 0;
+            noteOut();
             while (true)
             {
 
@@ -212,7 +211,8 @@ namespace DateBook
                             if (Console.ReadKey(true).Key == ConsoleKey.Backspace)
                             {
                                 Console.Clear();
-                                goto link2;
+                                noteOut();
+                                break;
                             }
                         }
                     }
@@ -220,20 +220,21 @@ namespace DateBook
 
                 }
                 else if (userKey.Key == ConsoleKey.F1) { makeNote(); }
-                else if (userKey.Key == ConsoleKey.F2) 
+                else if (userKey.Key == ConsoleKey.F2)
                 {
                     if (position > 0)
                     {
                         Notes.RemoveAt(Numbers[position - 1]);
                         Dates.RemoveAt(Numbers[position - 1]);
-                        goto link2;
+                        position = 0;
+                        noteOut();
                     }
                 }
-                else if (userKey.Key == ConsoleKey.F3){ saves(); }
+                else if (userKey.Key == ConsoleKey.F3) { saves(); }
                 else if (userKey.Key == ConsoleKey.F4)
                 {
-                    savesOut();
-                    goto link2;
+                    savesLoad();
+                    noteOut();
                 }
                 else if (userKey.Key == ConsoleKey.F5)
                 {
@@ -244,7 +245,7 @@ namespace DateBook
                     Console.WriteLine("Нажмите любую клавишу для продолжения");
                     Console.ResetColor();
                     userInput();
-                    goto link2;
+                    noteOut();
                 }
                 else if (userKey.Key == ConsoleKey.F6)
                 {
@@ -255,7 +256,7 @@ namespace DateBook
                     Console.WriteLine("Нажмите любую клавишу для продолжения");
                     Console.ResetColor();
                     userInput();
-                    goto link2;
+                    noteOut();
                 }
                 else if (userKey.Key == ConsoleKey.F10)
                 {
@@ -270,6 +271,7 @@ namespace DateBook
                     continue;
                 }
             }
+
 
         }
 
