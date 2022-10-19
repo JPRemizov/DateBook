@@ -142,6 +142,10 @@ namespace DateBook
                 file.SetLength(0);
                 xmlFormater2.Serialize(file, Dates);
             }
+            Console.Clear();
+            Console.WriteLine("Заметки сохранены!\nНажмите любую клавишу для продолжения");
+            userInputKey();
+            noteOut();
         }
         private static void savesLoad()
         {
