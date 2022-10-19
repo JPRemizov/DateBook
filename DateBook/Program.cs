@@ -150,7 +150,12 @@ namespace DateBook
             var xmlFormater2 = new XmlSerializer(typeof(List<string>));
             using (var file = new FileStream("saveNote.xml", FileMode.OpenOrCreate))
             {
-                var desNote = xmlFormater.Deserialize(file) as List<Note>;
+                var desNote = new List<Note> { };
+                try
+                {
+                    desNote = xmlFormater.Deserialize(file) as List<Note>;
+                }
+                catch { Console.WriteLine("Сохранения не найдены!"); desNote = null; }
                 if (desNote != null)
                 {
                     Notes.Clear();
@@ -158,11 +163,17 @@ namespace DateBook
                     {
                         Notes.Add(desNote[i]);
                     }
+                    Console.WriteLine("Сохранения загружены!");
                 }
             }
             using (var file = new FileStream("saveDate.xml", FileMode.OpenOrCreate))
             {
-                var desNote = xmlFormater2.Deserialize(file) as List<string>;
+                var desNote = new List<string> { };
+                try
+                {
+                    desNote = xmlFormater2.Deserialize(file) as List<string>;
+                }
+                catch { desNote = null; }
                 if (desNote != null)
                 {
                     Dates.Clear();
@@ -226,6 +237,7 @@ namespace DateBook
                         Notes.RemoveAt(Numbers[position - 1]);
                         Dates.RemoveAt(Numbers[position - 1]);
                         position = 0;
+                        size = 0;
                         noteOut();
                     }
                 }
@@ -233,6 +245,8 @@ namespace DateBook
                 else if (userKey.Key == ConsoleKey.F4)
                 {
                     savesLoad();
+                    Console.WriteLine("Для продолжения нажмите любую клавишу");
+                    userInputKey();
                     noteOut();
                 }
                 else if (userKey.Key == ConsoleKey.F5)
@@ -243,7 +257,7 @@ namespace DateBook
                     colorYellow();
                     Console.WriteLine("Нажмите любую клавишу для продолжения");
                     Console.ResetColor();
-                    userInput();
+                    userInputKey();
                     noteOut();
                 }
                 else if (userKey.Key == ConsoleKey.F6)
@@ -254,7 +268,7 @@ namespace DateBook
                     colorYellow();
                     Console.WriteLine("Нажмите любую клавишу для продолжения");
                     Console.ResetColor();
-                    userInput();
+                    userInputKey();
                     noteOut();
                 }
                 else if (userKey.Key == ConsoleKey.F9)
