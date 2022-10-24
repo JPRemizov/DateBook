@@ -17,7 +17,6 @@ namespace DateBook
         #endregion
         #region GlobalVar
         private static DateTime date = DateTime.Now;
-        private static Note note = new Note();
         private static int arrowPosition = 0;
         private static int size = 0;
         private static int Pos = 1;
