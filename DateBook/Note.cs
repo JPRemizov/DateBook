@@ -14,11 +14,13 @@ namespace DateBook
         private string _name;
         private string _description;
         private string _dateComp;
+        private string _date;
         private DateTime _dateNow;
 
-        public Note(string name, string description, string dateComp, DateTime dateNow)
+        public Note(string name, string description, string dateComp, DateTime dateNow, string date)
         {
-            this._name = name; this._description = description; this._dateComp = dateComp; this._dateNow = dateNow;
+            this._name = name; this._description = description; this._dateComp = dateComp; this._dateNow = dateNow; this._date = date; 
+            _date = date;
         }
         public Note() { }
         public string name
@@ -41,6 +43,11 @@ namespace DateBook
         {
             get { return _dateNow; }
             set { _dateNow = value; }
+        }
+        public string date
+        {
+            get { return _date; }
+            set { _date = value; }
         }
 
     }

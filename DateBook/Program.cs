@@ -13,7 +13,6 @@ namespace DateBook
     {
         #region Lists
         private static List<Note> Notes = new List<Note>() { };
-        private static List<string> Dates = new List<string>() { };
         private static List<int> Numbers = new List<int>() { };
         #endregion
         #region GlobalVar
@@ -83,9 +82,8 @@ namespace DateBook
         private static void makeNote()
         {
             Console.Clear();
-            Console.WriteLine($"Создание заметки на: {Date()}");
+            Console.WriteLine($"Создание заметки на: {_date()}");
             Console.WriteLine("==================================");
-            Dates.Add(Date());
             colorYellow();
             Console.WriteLine("Введите название заметки: ");
             Console.ResetColor();
@@ -98,22 +96,22 @@ namespace DateBook
             Console.WriteLine("Введите дату выполнения: ");
             Console.ResetColor();
             string DateComp = userInput();
-            Notes.Add(new Note(Name, Description, DateComp, DateTime.Now));
+            Notes.Add(new Note(Name, Description, DateComp, DateTime.Now, _date()));
             Console.Clear();
             noteOut();
         }
-        private static string Date()
+        private static string _date()
         {
             return $"{date.Day}.{date.Month}.{date.Year}";
         }
         private static void noteOut()
         {
             Console.Clear();
-            Console.WriteLine($"Выбранная дата: {Date()}");
+            Console.WriteLine($"Выбранная дата: {_date()}");
             Numbers.Clear();
-            for (int k = 0; k < Dates.Count; k++)
+            for (int k = 0; k < Notes.Count; k++)
             {
-                if (Dates[k] == Date())
+                if (Notes[k].date == _date())
                 {
                     Numbers.Add(k);
                     Console.WriteLine("  " + Pos + "." + Notes[k].name);
@@ -134,11 +132,6 @@ namespace DateBook
                 file.SetLength(0);
                 xmlFormater.Serialize(file, Notes);
             }
-            using (var file = new FileStream("saveDate.xml", FileMode.OpenOrCreate))
-            {
-                file.SetLength(0);
-                xmlFormater2.Serialize(file, Dates);
-            }
             Console.Clear();
             Console.WriteLine("Заметки сохранены!\nНажмите любую клавишу для продолжения");
             userInputKey();
@@ -146,11 +139,10 @@ namespace DateBook
         }
         private static void savesLoad()
         {
-            if (File.Exists("saveNote.xml") && File.Exists("saveDate.xml"))
+            if (File.Exists("saveNote.xml"))
             {
                 Console.Clear();
                 var xmlFormater = new XmlSerializer(typeof(List<Note>));
-                var xmlFormater2 = new XmlSerializer(typeof(List<string>));
                 using (var file = new FileStream("saveNote.xml", FileMode.OpenOrCreate))
                 {
                     var desNote = new List<Note> { };
@@ -158,7 +150,7 @@ namespace DateBook
                     {
                         desNote = xmlFormater.Deserialize(file) as List<Note>;
                     }
-                    catch { Console.WriteLine("Сохранения не найдены!"); desNote = null; }
+                    catch {desNote = null;}
                     if (desNote != null)
                     {
                         Notes.Clear();
@@ -167,23 +159,6 @@ namespace DateBook
                             Notes.Add(desNote[i]);
                         }
                         Console.WriteLine("Сохранения загружены!");
-                    }
-                }
-                using (var file = new FileStream("saveDate.xml", FileMode.OpenOrCreate))
-                {
-                    var desNote = new List<string> { };
-                    try
-                    {
-                        desNote = xmlFormater2.Deserialize(file) as List<string>;
-                    }
-                    catch { desNote = null; }
-                    if (desNote != null)
-                    {
-                        Dates.Clear();
-                        for (int i = 0; i < desNote.Count; i++)
-                        {
-                            Dates.Add(desNote[i]);
-                        }
                     }
                 }
             }
@@ -240,7 +215,6 @@ namespace DateBook
                     if (arrowPosition > 0)
                     {
                         Notes.RemoveAt(Numbers[arrowPosition - 1]);
-                        Dates.RemoveAt(Numbers[arrowPosition - 1]);
                         arrowPosition = 0;
                         size = 0;
                         noteOut();
@@ -262,7 +236,6 @@ namespace DateBook
                     try
                     {
                         File.Encrypt("saveNote.xml");
-                        File.Encrypt("saveDate.xml");
                         Console.WriteLine("Сохранения зашифрованы!");
                     }
                     catch { Console.WriteLine("Сохранения не найдены!"); }
@@ -279,7 +252,6 @@ namespace DateBook
                     try
                     {
                         File.Decrypt("saveNote.xml");
-                        File.Decrypt("saveDate.xml");
                         Console.WriteLine("Сохранения дешифрованы!");
                     }
                     catch { Console.WriteLine("Сохранения не найдены!");}
@@ -292,21 +264,24 @@ namespace DateBook
                 else if (userKey.Key == ConsoleKey.F9)
                 {
                     Console.Clear();
-                    link1:  Console.WriteLine("Вы действительно хотите удалить сохранения? (Да/Нет):");
-                    string validation = userInput();
-                    if(validation.ToLower() == "да")
+                    while (true)
                     {
-                        File.Delete("saveDate.xml");
-                        File.Delete("saveNote.xml");
-                        colorYellow();
-                        Console.WriteLine("Сохранения удалены!\nНажмите любую клавишу для продолжения");
-                        Console.ResetColor();
-                        userInput();
-                        noteOut();
-                        
+                        Console.WriteLine("Вы действительно хотите удалить сохранения? (Да/Нет):");
+                        string validation = userInput();
+                        if (validation.ToLower() == "да")
+                        {
+                            File.Delete("saveNote.xml");
+                            colorYellow();
+                            Console.WriteLine("Сохранения удалены!\nНажмите любую клавишу для продолжения");
+                            Console.ResetColor();
+                            userInput();
+                            noteOut();
+                            break;
+
+                        }
+                        else if (validation.ToLower() == "нет") { noteOut(); break; }
+                        else { Console.WriteLine("Введите либо \"Да\", либо \"Нет\""); break; }
                     }
-                    else if (validation.ToLower() == "нет") { noteOut(); }
-                    else { Console.WriteLine("Введите либо \"Да\", либо \"Нет\""); goto link1; }
                 }
                 else if (userKey.Key == ConsoleKey.F10)
                 {
