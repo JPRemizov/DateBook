@@ -1,11 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics.Metrics;
-using System.Drawing;
-using System.Reflection.Metadata;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Xml.Serialization;
+﻿using System.Runtime.Serialization.Formatters.Binary;
 
 namespace DateBook
 {
@@ -124,12 +117,11 @@ namespace DateBook
         }
         private static void saves()
         {
-            var xmlFormater = new XmlSerializer(typeof(List<Note>));
-            var xmlFormater2 = new XmlSerializer(typeof(List<string>));
-            using (var file = new FileStream("saveNote.xml", FileMode.OpenOrCreate))
+            var binFormater = new BinaryFormatter();
+            using (var file = new FileStream("saveNote.bin", FileMode.OpenOrCreate))
             {
                 file.SetLength(0);
-                xmlFormater.Serialize(file, Notes);
+                binFormater.Serialize(file, Notes);
             }
             Console.Clear();
             Console.WriteLine("Заметки сохранены!\nНажмите любую клавишу для продолжения");
@@ -138,16 +130,16 @@ namespace DateBook
         }
         private static void savesLoad()
         {
-            if (File.Exists("saveNote.xml"))
+            if (File.Exists("saveNote.bin"))
             {
                 Console.Clear();
-                var xmlFormater = new XmlSerializer(typeof(List<Note>));
-                using (var file = new FileStream("saveNote.xml", FileMode.OpenOrCreate))
+                var binFormater = new BinaryFormatter();
+                using (var file = new FileStream("saveNote.bin", FileMode.OpenOrCreate))
                 {
                     var desNote = new List<Note> { };
                     try
                     {
-                        desNote = xmlFormater.Deserialize(file) as List<Note>;
+                        desNote = binFormater.Deserialize(file) as List<Note>;
                     }
                     catch {desNote = null;}
                     if (desNote != null)
@@ -234,7 +226,7 @@ namespace DateBook
                     Console.Clear();
                     try
                     {
-                        File.Encrypt("saveNote.xml");
+                        File.Encrypt("saveNote.bin");
                         Console.WriteLine("Сохранения зашифрованы!");
                     }
                     catch { Console.WriteLine("Сохранения не найдены!"); }
@@ -250,7 +242,7 @@ namespace DateBook
                     Console.Clear();
                     try
                     {
-                        File.Decrypt("saveNote.xml");
+                        File.Decrypt("saveNote.bin");
                         Console.WriteLine("Сохранения дешифрованы!");
                     }
                     catch { Console.WriteLine("Сохранения не найдены!");}

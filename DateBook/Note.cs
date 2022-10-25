@@ -8,6 +8,7 @@ using System.Xml.Linq;
 
 namespace DateBook
 {
+    [Serializable]
     public class Note
     {
 
