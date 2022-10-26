@@ -48,7 +48,6 @@ namespace DateBook
         public string date
         {
             get { return _date; }
-            set { _date = value; }
         }
 
     }
