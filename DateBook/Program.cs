@@ -134,7 +134,7 @@ namespace DateBook
             {
                 Console.Clear();
                 var binFormater = new BinaryFormatter();
-                using (var file = new FileStream("saveNote.bin", FileMode.OpenOrCreate))
+                using (var file = new FileStream("saveNote.bin", FileMode.Open))
                 {
                     var desNote = new List<Note> { };
                     try
